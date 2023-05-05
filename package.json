@@ -1,0 +1,16 @@
+{
+  "name": "todo_api",
+  "version": "1.0.0",
+  "description": "Todo api example",
+  "main": "index.js",
+  "author": "Freddy Monroy <fredydeltoro@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.40.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-watch": "^8.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8"
+  }
+}
