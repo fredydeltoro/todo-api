@@ -20,7 +20,7 @@ TodoList.hasMany(TodoItem);
 TodoItem.belongsTo(TodoList);
 
 sequelize
-  .sync()
+  .authenticate()
   .then(() => {
     console.log('====== Connection has been established successfully. ======');
   })
