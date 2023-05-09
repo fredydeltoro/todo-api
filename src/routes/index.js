@@ -1,7 +1,9 @@
 const health = require('./health');
-const create = require('./create');
+const signup = require('./signup');
+const login = require('./login');
 
 module.exports = (app) => {
   app.use('/health', health);
-  app.use('/api/create', create);
+  app.use('/api/signup', signup);
+  app.use('/api/login', login);
 };

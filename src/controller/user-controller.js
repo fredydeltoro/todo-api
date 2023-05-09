@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { Op } = require('sequelize');
 const { User } = require('../models').models;
 const errorsMap = require('../lib/errorsMap');
 const userController = {};
@@ -19,6 +20,26 @@ userController.create = async (userBody) => {
     }
   } else {
     return { errors: ['User already exists'] };
+  }
+};
+
+userController.login = async ({ user, password }) => {
+  const currentUser = await User.findOne({
+    where: {
+      [Op.or]: [{ username: user }, { email: user }],
+    },
+  });
+
+  if (!currentUser) {
+    return { error: 'User does not exist' };
+  } else {
+    const match = await bcrypt.compare(password, currentUser.password);
+
+    if (match) {
+      return { jwt: 'adfasdfasfjsfjasf+222' };
+    } else {
+      return { error: 'Password does not match' };
+    }
   }
 };
 
