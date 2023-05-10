@@ -1,15 +1,38 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userController = require('../../controller/user-controller');
 
 router.post('/', async (req, res) => {
-  const auth = await userController.login(req.body);
-  let status = 200;
+  const { user, password } = req.body;
+  const currentUser = await userController.findUser(user);
 
-  if (auth.error) {
-    status = 400;
+  if (!currentUser || currentUser.error) {
+    res.status(400).json({ error: 'User does not exist' });
+  } else {
+    const match = await bcrypt.compare(password, currentUser.password);
+    const { email, username, id } = currentUser;
+
+    if (match) {
+      try {
+        const token = await jwt.sign(
+          {
+            email,
+            username,
+            userId: id,
+          },
+          'topsecret',
+          { expiresIn: '12h' },
+        );
+        res.status(202).json({ token });
+      } catch (error) {
+        res.status(400).json({ error: 'Something went wrong' });
+      }
+    } else {
+      res.status(400).json({ error: 'Password does not match' });
+    }
   }
-  res.status(status).json(auth);
 });
 
 module.exports = router;

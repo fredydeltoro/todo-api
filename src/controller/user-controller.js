@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const { User } = require('../models').models;
 const errorsMap = require('../lib/errorsMap');
@@ -24,37 +23,17 @@ userController.create = async (userBody) => {
   }
 };
 
-userController.login = async ({ user, password }) => {
-  const currentUser = await User.findOne({
-    where: {
-      [Op.or]: [{ username: user }, { email: user }],
-    },
-  });
+userController.findUser = async (user) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username: user }, { email: user }],
+      },
+    });
 
-  if (!currentUser) {
-    return { error: 'User does not exist' };
-  } else {
-    const match = await bcrypt.compare(password, currentUser.password);
-    const { email, username, id } = currentUser;
-
-    if (match) {
-      try {
-        const token = await jwt.sign(
-          {
-            email,
-            username,
-            userId: id,
-          },
-          'topsecret',
-          { expiresIn: '12h' },
-        );
-        return { token };
-      } catch (error) {
-        return { error: 'Something went wrong' };
-      }
-    } else {
-      return { error: 'Password does not match' };
-    }
+    return currentUser;
+  } catch (error) {
+    return { error };
   }
 };
 
