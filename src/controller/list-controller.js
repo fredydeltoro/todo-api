@@ -26,4 +26,28 @@ listConrtoller.create = async (body) => {
   }
 };
 
+listConrtoller.find = async (id) => {
+  try {
+    const list = await TodoList.findByPk(id);
+    return list;
+  } catch (error) {
+    return { error: 'Something went wrong' };
+  }
+};
+
+listConrtoller.update = async (id, body) => {
+  const list = await listConrtoller.find(id);
+
+  if (list.error) {
+    return list.error;
+  } else {
+    if (Object.keys(body).length) {
+      const listUpdated = await list.update(body);
+      return listUpdated;
+    }
+
+    return list;
+  }
+};
+
 module.exports = listConrtoller;
