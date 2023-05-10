@@ -15,7 +15,7 @@ const authenticate = async (req, res, next) => {
         res.locals.user = decoded;
         next();
       } catch (error) {
-        res.sendStatus(401);
+        res.status(401).json({ error });
       }
     } else {
       res.sendStatus(401);
