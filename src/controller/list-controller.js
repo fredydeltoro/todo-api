@@ -1,4 +1,5 @@
-const { TodoList } = require('../models').models;
+const { Op } = require('sequelize');
+const { TodoList, TodoItem } = require('../models').models;
 const errorsMap = require('../lib/errorsMap');
 
 const listConrtoller = {};
@@ -29,7 +30,12 @@ listConrtoller.create = async (body) => {
 listConrtoller.find = async (id) => {
   try {
     const list = await TodoList.findByPk(id);
-    return list;
+
+    if (list) {
+      return list;
+    } else {
+      return { error: 'Not Found' };
+    }
   } catch (error) {
     return { error: 'Something went wrong' };
   }
@@ -39,7 +45,7 @@ listConrtoller.update = async (id, body) => {
   const list = await listConrtoller.find(id);
 
   if (list.error) {
-    return list.error;
+    return list;
   } else {
     if (Object.keys(body).length) {
       const listUpdated = await list.update(body);
@@ -47,6 +53,48 @@ listConrtoller.update = async (id, body) => {
     }
 
     return list;
+  }
+};
+
+listConrtoller.getItems = async (id) => {
+  const list = await listConrtoller.find(id);
+
+  if (list.error) {
+    return list;
+  } else {
+    const items = await list.getTodoItems();
+    return items;
+  }
+};
+
+listConrtoller.createItem = async (id, body) => {
+  const list = await listConrtoller.find(id);
+
+  if (list.error) {
+    return list;
+  } else {
+    try {
+      const item = await list.createTodoItem(body);
+      return item;
+    } catch (err) {
+      return { errors: errorsMap(err.errors) };
+    }
+  }
+};
+
+listConrtoller.updateItem = async (listId, id, body) => {
+  const item = await TodoItem.findOne({
+    where: {
+      [Op.and]: [{ TodoListId: listId }, { id }],
+    },
+  });
+
+  if (item) {
+    const newItem = await item.update(body);
+
+    return newItem;
+  } else {
+    return { error: 'Not Found' };
   }
 };
 
