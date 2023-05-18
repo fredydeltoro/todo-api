@@ -27,7 +27,6 @@ itemController.delete = async (listId, id) => {
     },
   });
 
-  console.log('a ver ====>', item);
   if (item) {
     const newItem = await item.destroy();
 

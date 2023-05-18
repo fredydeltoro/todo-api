@@ -14,9 +14,15 @@ const TodoItem = todoItem(sequelize);
 
 // Relations
 
-User.hasMany(TodoList);
+User.hasMany(TodoList, {
+  onDelete: 'CASCADE',
+  onUpdate: 'RESTRICT',
+});
 TodoList.belongsTo(User);
-TodoList.hasMany(TodoItem);
+TodoList.hasMany(TodoItem, {
+  onDelete: 'CASCADE',
+  onUpdate: 'RESTRICT',
+});
 TodoItem.belongsTo(TodoList);
 
 sequelize
