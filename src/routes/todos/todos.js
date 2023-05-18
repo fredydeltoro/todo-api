@@ -45,6 +45,16 @@ router.put('/:id', async (req, res) => {
   res.status(status).json(list);
 });
 
+router.delete('/:id', async (req, res) => {
+  const list = await listController.delete(req.params.id);
+
+  if (list.error) {
+    res.status(400).json(list);
+  } else {
+    res.sendStatus(204);
+  }
+});
+
 // items
 
 router.get('/:id/items', async (req, res) => {

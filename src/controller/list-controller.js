@@ -82,4 +82,15 @@ listConrtoller.createItem = async (id, body) => {
   }
 };
 
+listConrtoller.delete = async (id) => {
+  const list = await listConrtoller.find(id);
+
+  if (list.error) {
+    return list;
+  } else {
+    const destroyed = await list.destroy();
+    return destroyed;
+  }
+};
+
 module.exports = listConrtoller;
