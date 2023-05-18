@@ -82,20 +82,4 @@ listConrtoller.createItem = async (id, body) => {
   }
 };
 
-listConrtoller.updateItem = async (listId, id, body) => {
-  const item = await TodoItem.findOne({
-    where: {
-      [Op.and]: [{ TodoListId: listId }, { id }],
-    },
-  });
-
-  if (item) {
-    const newItem = await item.update(body);
-
-    return newItem;
-  } else {
-    return { error: 'Not Found' };
-  }
-};
-
 module.exports = listConrtoller;
