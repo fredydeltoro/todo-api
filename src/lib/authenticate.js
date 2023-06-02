@@ -4,7 +4,7 @@ const exclude = ['login', 'signup'];
 const authenticate = async (req, res, next) => {
   const path = req.path.split('/');
 
-  if (exclude.includes(path[2])) {
+  if (path[1] !== 'api' || exclude.includes(path[2])) {
     next();
   } else {
     const token = req.headers.authorization?.split(' ');
