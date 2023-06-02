@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: 'User does not exist' });
   } else {
     const match = await bcrypt.compare(password, currentUser.password);
-    const { email, username, id } = currentUser;
+    const { email, username, id, firstName, lastName } = currentUser;
 
     if (match) {
       try {
@@ -21,6 +21,8 @@ router.post('/', async (req, res) => {
             email,
             username,
             userId: id,
+            firstName,
+            lastName,
           },
           'topsecret',
           { expiresIn: '12h' },
@@ -30,7 +32,7 @@ router.post('/', async (req, res) => {
         res.status(400).json({ error: 'Something went wrong' });
       }
     } else {
-      res.status(400).json({ error: 'Password does not match' });
+      res.status(400).json({ error: 'User or password does not match' });
     }
   }
 });
