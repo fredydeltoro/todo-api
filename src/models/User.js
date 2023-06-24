@@ -1,13 +1,16 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class User extends Model {}
+  class User extends Model { }
 
   User.init(
     {
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true
+        }
       },
       lastName: {
         type: DataTypes.STRING,
@@ -16,6 +19,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+          notEmpty: true
+        }
       },
       email: {
         type: DataTypes.STRING,
@@ -23,11 +29,15 @@ module.exports = (sequelize) => {
         unique: true,
         validate: {
           isEmail: true,
+          notEmpty: true
         },
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true
+        }
       },
     },
     {

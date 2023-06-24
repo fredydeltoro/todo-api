@@ -1,13 +1,16 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class TodoItem extends Model {}
+  class TodoItem extends Model { }
 
   TodoItem.init(
     {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true
+        }
       },
       description: {
         type: DataTypes.STRING,
