@@ -1,4 +1,3 @@
-const { Op } = require('sequelize');
 const { TodoList, TodoItem } = require('../models').models;
 const errorsMap = require('../lib/errorsMap');
 
@@ -6,13 +5,23 @@ const listConrtoller = {};
 
 listConrtoller.all = async (UserId) => {
   if (UserId) {
-    const all = await TodoList.findAll({
-      where: {
-        UserId,
-      },
-    });
+    const [results, metadata] = await TodoList.sequelize.query(`
+      SELECT 
+        "TodoLists"."id", 
+        "TodoLists"."name", 
+        "TodoLists"."description", 
+        COUNT("TodoItems"."id") as ItemsCount 
+      FROM 
+        "TodoLists" 
+        LEFT JOIN "TodoItems" ON "TodoLists"."id" = "TodoItems"."TodoListId" 
+      WHERE 
+        "TodoLists"."UserId" = ${UserId} 
+      GROUP BY 
+        "TodoItems"."id", 
+        "TodoLists"."id";
+  `);
 
-    return all;
+    return results;
   } else {
     return [];
   }
