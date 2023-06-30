@@ -17,7 +17,8 @@ listConrtoller.all = async (UserId) => {
       WHERE 
         "TodoLists"."UserId" = ${UserId} 
       GROUP BY 
-        "TodoLists"."id";
+        "TodoLists"."id"
+      ORDER BY "TodoLists"."createdAt"
   `);
 
     return results;
@@ -70,7 +71,9 @@ listConrtoller.getItems = async (id) => {
   if (list.error) {
     return list;
   } else {
-    const items = await list.getTodoItems();
+    const items = await list.getTodoItems({
+      order: ['createdAt'],
+    });
     return items;
   }
 };
