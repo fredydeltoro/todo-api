@@ -17,7 +17,6 @@ listConrtoller.all = async (UserId) => {
       WHERE 
         "TodoLists"."UserId" = ${UserId} 
       GROUP BY 
-        "TodoItems"."id", 
         "TodoLists"."id";
   `);
 
