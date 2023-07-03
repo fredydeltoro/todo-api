@@ -87,7 +87,7 @@ router.patch('/:listId/items/:id', async (req, res) => {
 
   const newItem = await itemController.update(listId, id, body);
 
-  if (newItem.error) {
+  if (newItem.error || newItem.errors) {
     status = 400;
   }
 

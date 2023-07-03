@@ -12,9 +12,13 @@ itemController.update = async (listId, id, body) => {
   });
 
   if (item) {
-    const newItem = await item.update(body);
+    try {
+      const newItem = await item.update(body);
 
-    return newItem;
+      return newItem;
+    } catch (err) {
+      return { errors: errorsMap(err.errors) };
+    }
   } else {
     return { error: 'Not Found' };
   }
