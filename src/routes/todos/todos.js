@@ -38,7 +38,7 @@ router.put('/:id', async (req, res) => {
   let status = 201;
   const list = await listController.update(req.params.id, req.body);
 
-  if (list.error) {
+  if (list.error || list.errors) {
     status = 400;
   }
 

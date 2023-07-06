@@ -57,8 +57,12 @@ listConrtoller.update = async (id, body) => {
     return list;
   } else {
     if (Object.keys(body).length) {
-      const listUpdated = await list.update(body);
-      return listUpdated;
+      try {
+        const listUpdated = await list.update(body);
+        return listUpdated;
+      } catch (err) {
+        return { errors: errorsMap(err.errors) };
+      }
     }
 
     return list;
